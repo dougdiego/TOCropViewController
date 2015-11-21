@@ -47,6 +47,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
 @property (nonatomic, strong) UIView *snapshotView;
 @property (nonatomic, strong) TOCropViewControllerTransitioning *transitionController;
 @property (nonatomic, assign) BOOL inTransition;
+@property (nonatomic, assign) CGSize aspectRatio;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -81,6 +82,21 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     return self;
 }
 
+- (instancetype)initWithImage:(UIImage *)image aspectRatio:(CGSize) aspectRatio
+{
+    self = [super init];
+    if (self) {
+        self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        self.modalPresentationStyle = UIModalPresentationFullScreen;
+        
+        _transitionController = [[TOCropViewControllerTransitioning alloc] init];
+        _image = image;
+        _aspectRatio = aspectRatio;
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -90,10 +106,15 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     self.cropView.frame = (CGRect){(landscapeLayout ? 44.0f : 0.0f),0,(CGRectGetWidth(self.view.bounds) - (landscapeLayout ? 44.0f : 0.0f)), (CGRectGetHeight(self.view.bounds)-(landscapeLayout ? 0.0f : 44.0f)) };
     self.cropView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.cropView.delegate = self;
-    [self.view addSubview:self.cropView];
     
-    self.toolbar = [[TOCropToolbar alloc] initWithFrame:CGRectZero];
+    [self.view addSubview:self.cropView];
+    if(!CGSizeEqualToSize(_aspectRatio, CGSizeZero)) {
+       self.toolbar = [[TOCropToolbar alloc] initWithFrame:CGRectZero hideAction:true];
+    } else {
+        self.toolbar = [[TOCropToolbar alloc] initWithFrame:CGRectZero hideAction:false];
+    }
     self.toolbar.frame = [self frameForToolBarWithVerticalLayout:CGRectGetWidth(self.view.bounds) < CGRectGetHeight(self.view.bounds)];
+    
     [self.view addSubview:self.toolbar];
     
     __weak typeof(self) weakSelf = self;
@@ -115,6 +136,10 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     if ([UIApplication sharedApplication].statusBarHidden == NO) {
         self.inTransition = YES;
         [self setNeedsStatusBarAppearanceUpdate];
+    }
+    
+    if(!CGSizeEqualToSize(_aspectRatio, CGSizeZero)) {
+       [self.cropView setAspectLockEnabledWithAspectRatio:_aspectRatio animated:YES];
     }
 }
 

@@ -99,6 +99,8 @@
 /// @name Object Creation
 ///------------------------------------------------
 
+- (instancetype)initWithImage:(UIImage *)image aspectRatio:(CGSize) aspectRatio;
+
 /**
  Creates a new instance of a crop view controller with the supplied image
  

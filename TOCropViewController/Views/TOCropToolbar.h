@@ -24,6 +24,8 @@
 
 @interface TOCropToolbar : UIView
 
+- (instancetype)initWithFrame:(CGRect)frame hideAction:(BOOL) hideActions;
+
 /* Button feedback handler blocks */
 @property (nonatomic, copy) void (^cancelButtonTapped)(void);
 @property (nonatomic, copy) void (^doneButtonTapped)(void);

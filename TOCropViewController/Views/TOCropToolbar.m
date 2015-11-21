@@ -33,6 +33,7 @@
 @property (nonatomic, strong) UIButton *rotateButton;
 @property (nonatomic, strong) UIButton *resetButton;
 @property (nonatomic, strong) UIButton *clampButton;
+@property (nonatomic) BOOL hideActions;
 
 - (void)setup;
 - (void)buttonTapped:(id)button;
@@ -47,9 +48,10 @@
 
 @implementation TOCropToolbar
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame hideAction:(BOOL) hideActions
 {
     if (self = [super initWithFrame:frame]) {
+        _hideActions = hideActions;
         [self setup];
     }
     
@@ -98,14 +100,18 @@
     _clampButton.tintColor = [UIColor whiteColor];
     [_clampButton setImage:[TOCropToolbar clampImage] forState:UIControlStateNormal];
     [_clampButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_clampButton];
+    if( !_hideActions ){
+        [self addSubview:_clampButton];
+    }
     
     _rotateButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _rotateButton.contentMode = UIViewContentModeCenter;
     _rotateButton.tintColor = [UIColor whiteColor];
     [_rotateButton setImage:[TOCropToolbar rotateImage] forState:UIControlStateNormal];
     [_rotateButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_rotateButton];
+     if( !_hideActions ){
+         [self addSubview:_rotateButton];
+     }
     
     _resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _resetButton.contentMode = UIViewContentModeCenter;
@@ -113,7 +119,9 @@
     _resetButton.enabled = NO;
     [_resetButton setImage:[TOCropToolbar resetImage] forState:UIControlStateNormal];
     [_resetButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_resetButton];
+    if( !_hideActions ){
+         [self addSubview:_resetButton];
+    }
 }
 
 - (void)layoutSubviews
