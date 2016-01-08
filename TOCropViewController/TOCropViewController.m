@@ -133,10 +133,10 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
 {
     [super viewWillAppear:animated];
     
-    if ([UIApplication sharedApplication].statusBarHidden == NO) {
+    //if ([UIApplication sharedApplication].statusBarHidden == NO) {
         self.inTransition = YES;
         [self setNeedsStatusBarAppearanceUpdate];
-    }
+    //}
     
     if(!CGSizeEqualToSize(_aspectRatio, CGSizeZero)) {
        [self.cropView setAspectLockEnabledWithAspectRatio:_aspectRatio animated:YES];
@@ -147,12 +147,12 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
 {
     [super viewDidAppear:animated];
     self.inTransition = NO;
-    if (animated && [UIApplication sharedApplication].statusBarHidden == NO) {
+    //if (animated && [UIApplication sharedApplication].statusBarHidden == NO) {
         [UIView animateWithDuration:0.3f animations:^{ [self setNeedsStatusBarAppearanceUpdate]; }];
         
         if (self.cropView.gridOverlayHidden)
             [self.cropView setGridOverlayHidden:NO animated:YES];
-    }
+    //}
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -284,37 +284,18 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
         return;
     }
     
-    //TODO: Completely overhaul this once iOS 7 support is dropped
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    BOOL verticalCropBox = self.cropView.cropBoxAspectRatioIsPortrait;
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:NSLocalizedStringFromTableInBundle(@"Cancel",
-                                                                                                         @"TOCropViewControllerLocalizable",
-                                                                                                         [NSBundle bundleForClass:[self class]],
-                                                                                                         nil)
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:NSLocalizedStringFromTableInBundle(@"Original",
-                                                                                                          @"TOCropViewControllerLocalizable",
-                                                                                                          [NSBundle bundleForClass:[self class]],
-                                                                                                          nil),
-                                                                      NSLocalizedStringFromTableInBundle(@"Square",
-                                                                                                         @"TOCropViewControllerLocalizable",
-                                                                                                         [NSBundle bundleForClass:[self class]],
-                                                                                                         nil),
-                                                                      verticalCropBox ? @"2:3" : @"3:2",
-                                                                      verticalCropBox ? @"3:5" : @"5:3",
-                                                                      verticalCropBox ? @"3:4" : @"4:3",
-                                                                      verticalCropBox ? @"4:5" : @"5:4",
-                                                                      verticalCropBox ? @"5:7" : @"7:5",
-                                                                      verticalCropBox ? @"9:16" : @"16:9",nil];
+    UIAlertController * alert =   [UIAlertController
+                                  alertControllerWithTitle:@"Error"
+                                  message:@"This feature has been removed"
+                                  preferredStyle:UIAlertControllerStyleAlert];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        [actionSheet showFromRect:self.toolbar.clampButtonFrame inView:self.toolbar animated:YES];
-    else
-        [actionSheet showInView:self.view];
-#pragma clang diagnostic pop
+    UIAlertAction * action = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //
+    }];
+    [alert addAction:action];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+   
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
