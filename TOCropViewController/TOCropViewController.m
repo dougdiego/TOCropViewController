@@ -212,7 +212,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
 }
 
 -(CGRect)frameForLabel {
-    return CGRectMake(8, 40, CGRectGetWidth(self.view.bounds)-16, 40 );
+    return CGRectMake(8, 24, CGRectGetWidth(self.view.bounds)-16, 40 );
 }
 
 - (void)viewDidLayoutSubviews
