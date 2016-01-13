@@ -43,6 +43,9 @@
 /* Enable the reset button */
 @property (nonatomic, assign) BOOL resetButtonEnabled;
 
+/* Enable the done button */
+@property (nonatomic, assign) BOOL doneButtonEnabled;
+
 /* Done button frame for popover controllers */
 @property (nonatomic, readonly) CGRect doneButtonFrame;
 

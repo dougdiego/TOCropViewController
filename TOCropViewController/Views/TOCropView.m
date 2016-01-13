@@ -498,6 +498,10 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
     self.cropBoxFrame = frame;
     
     [self checkForCanReset];
+    
+    if ([self.delegate respondsToSelector:@selector(cropView:didChangeToCropSize:)]) {
+        [self.delegate cropView:self didChangeToCropSize:self.croppedImageFrame.size];
+    }
 }
 
 - (void)resetLayoutToDefaultAnimated:(BOOL)animated
@@ -758,7 +762,7 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
     frame.size.width = MIN(imageSize.width, frame.size.width);
     
     frame.size.height = ceilf(cropBoxFrame.size.height * (imageSize.height / contentSize.height));
-    frame.size.height = MIN(imageSize.height, frame.size.height);
+    frame.size.height = MAX(imageSize.height, frame.size.height);
     
     return frame;
 }

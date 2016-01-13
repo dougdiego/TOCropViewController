@@ -48,6 +48,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
 @property (nonatomic, strong) TOCropViewControllerTransitioning *transitionController;
 @property (nonatomic, assign) BOOL inTransition;
 @property (nonatomic, assign) CGSize aspectRatio;
+@property (nonatomic, strong) UILabel *label;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -127,6 +128,14 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     self.transitioningDelegate = self;
     
     self.view.backgroundColor = self.cropView.backgroundColor;
+    
+    // Setup Label
+    self.label = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.label.frame = CGRectMake(8, 0, CGRectGetWidth(self.view.bounds)-16, 40 );
+    self.label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
+    self.label.textColor = UIColor.whiteColor;
+    self.label.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:self.label];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -153,6 +162,8 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
         if (self.cropView.gridOverlayHidden)
             [self.cropView setGridOverlayHidden:NO animated:YES];
     //}
+    
+    [self updateLabelWithSize: self.cropView.croppedImageFrame.size];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -223,6 +234,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     [UIView setAnimationsEnabled:NO];
     self.toolbar.frame = [self frameForToolBarWithVerticalLayout:verticalLayout];
     [self.toolbar setNeedsLayout];
+    self.label.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 40 );
     [UIView setAnimationsEnabled:YES];
 }
 
@@ -246,6 +258,8 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     
     self.cropView.simpleMode = YES;
     [self.cropView prepareforRotation];
+    
+    self.label.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 40 );
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -257,6 +271,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
         self.toolbar.alpha = 1.0f;
     }];
     [self.cropView performRelayoutForRotation];
+    self.label.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 40 );
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -355,6 +370,26 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
 - (void)cropViewDidBecomeNonResettable:(TOCropView *)cropView
 {
     self.toolbar.resetButtonEnabled = NO;
+}
+
+- (void)cropView:(TOCropView *)cropView didChangeToCropSize: (CGSize) size {
+    NSLog(@"didChangeToCropSize");
+    [self updateLabelWithSize: size];
+}
+
+- (void) updateLabelWithSize: (CGSize) size {
+    
+    NSString * sizeString = [NSString stringWithFormat:@"%@x%@", @(size.width), @(size.height)];
+    if( size.width >= 3840){
+        self.label.text = [NSString stringWithFormat:@"%@ (UDH)", sizeString];
+         self.toolbar.doneButtonEnabled = true;
+    } else if (size.width < 1920){
+        self.label.text = [NSString stringWithFormat:@"%@ (Too Small)", sizeString];
+        self.toolbar.doneButtonEnabled = false;
+    } else {
+        self.label.text = sizeString;
+        self.toolbar.doneButtonEnabled = true;
+    }
 }
 
 #pragma mark - Presentation Handling -

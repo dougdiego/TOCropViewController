@@ -69,6 +69,7 @@
                                                                  nil)
                      forState:UIControlStateNormal];
     [_doneTextButton setTitleColor:[UIColor colorWithRed:1.0f green:0.8f blue:0.0f alpha:1.0f] forState:UIControlStateNormal];
+    [_doneTextButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateDisabled];
     [_doneTextButton.titleLabel setFont:[UIFont systemFontOfSize:17.0f]];
     [_doneTextButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_doneTextButton];
@@ -259,6 +260,16 @@
 - (void)setResetButtonEnabled:(BOOL)resetButtonEnabled
 {
     self.resetButton.enabled = resetButtonEnabled;
+}
+
+- (BOOL) doneButtonEnabled
+{
+    return self.doneTextButton.enabled;
+}
+
+- (void)setDoneButtonEnabled:(BOOL)doneButtonEnabled
+{
+    self.doneTextButton.enabled = doneButtonEnabled;
 }
 
 - (CGRect)doneButtonFrame

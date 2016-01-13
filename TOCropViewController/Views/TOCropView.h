@@ -28,7 +28,7 @@
 
 - (void)cropViewDidBecomeResettable:(TOCropView *)cropView;
 - (void)cropViewDidBecomeNonResettable:(TOCropView *)cropView;
-
+- (void)cropView:(TOCropView *)cropView didChangeToCropSize: (CGSize) size;
 @end
 
 @interface TOCropView : UIView
