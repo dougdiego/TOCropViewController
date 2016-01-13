@@ -377,7 +377,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
 }
 
 - (void)cropView:(TOCropView *)cropView didChangeToCropSize: (CGSize) size {
-    NSLog(@"didChangeToCropSize");
+    //NSLog(@"didChangeToCropSize");
     [self updateLabelWithSize: size];
 }
 
