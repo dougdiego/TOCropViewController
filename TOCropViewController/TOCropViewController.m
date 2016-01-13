@@ -131,7 +131,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     
     // Setup Label
     self.label = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.label.frame = CGRectMake(8, 0, CGRectGetWidth(self.view.bounds)-16, 40 );
+    self.label.frame = [self frameForLabel];
     self.label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
     self.label.textColor = UIColor.whiteColor;
     self.label.textAlignment = NSTextAlignmentCenter;
@@ -211,6 +211,10 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     return frame;
 }
 
+-(CGRect)frameForLabel {
+    return CGRectMake(8, 20, CGRectGetWidth(self.view.bounds)-16, 40 );
+}
+
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
@@ -234,7 +238,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     [UIView setAnimationsEnabled:NO];
     self.toolbar.frame = [self frameForToolBarWithVerticalLayout:verticalLayout];
     [self.toolbar setNeedsLayout];
-    self.label.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 40 );
+    self.label.frame = [self frameForLabel];
     [UIView setAnimationsEnabled:YES];
 }
 
@@ -259,7 +263,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     self.cropView.simpleMode = YES;
     [self.cropView prepareforRotation];
     
-    self.label.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 40 );
+    self.label.frame = [self frameForLabel];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -271,7 +275,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
         self.toolbar.alpha = 1.0f;
     }];
     [self.cropView performRelayoutForRotation];
-    self.label.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 40 );
+    self.label.frame = [self frameForLabel];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
