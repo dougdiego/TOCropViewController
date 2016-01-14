@@ -295,6 +295,7 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
 
 - (void)updateCropBoxFrameWithGesturePoint:(CGPoint)point
 {
+    //NSLog(@"updateCropBoxFrameWithGesturePoint");
     CGRect frame = self.cropBoxFrame;
     CGRect originFrame = self.cropOriginFrame;
     CGRect contentFrame = self.contentBounds;
@@ -530,6 +531,7 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
 #pragma mark - Gesture Recognizer -
 - (void)gridPanGestureRecognized:(UIPanGestureRecognizer *)recognizer
 {
+    //NSLog(@"gestureRecognizerShouldBegin: %@", recognizer);
     CGPoint point = [recognizer locationInView:self];
     
     if (recognizer.state == UIGestureRecognizerStateBegan) {
@@ -547,6 +549,7 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
 
 - (void)longPressGestureRecognized:(UILongPressGestureRecognizer *)recognizer
 {
+     //NSLog(@"gestureRecognizerShouldBegin: %@", recognizer);
     if (recognizer.state == UIGestureRecognizerStateBegan)
         [self.gridOverlayView setGridHidden:NO animated:YES];
     
@@ -556,6 +559,7 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
+    //NSLog(@"gestureRecognizerShouldBegin: %@", gestureRecognizer);
     if (gestureRecognizer != self.gridPanGestureRecognizer)
         return YES;
     
@@ -578,6 +582,9 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
         return;
     
     self.resetTimer = [NSTimer scheduledTimerWithTimeInterval:kTOCropTimerDuration target:self selector:@selector(timerTriggered) userInfo:nil repeats:NO];
+    if ([self.delegate respondsToSelector:@selector(cropView:didChangeToCropSize:)]) {
+        [self.delegate cropView:self didChangeToCropSize:self.croppedImageFrame.size];
+    }
 }
 
 - (void)timerTriggered
@@ -762,7 +769,14 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
     frame.size.width = MIN(imageSize.width, frame.size.width);
     
     frame.size.height = ceilf(cropBoxFrame.size.height * (imageSize.height / contentSize.height));
-    frame.size.height = MAX(imageSize.height, frame.size.height);
+    frame.size.height = MIN(imageSize.height, frame.size.height);
+    
+    //NSLog(@"croppedImageFrame size: %@", NSStringFromCGSize(frame.size));
+    //NSLog(@"frame.size.width: %@", @(frame.size.width));
+    CGFloat height = ceilf(frame.size.width/((CGFloat)16/(CGFloat)9));
+    //NSLog(@"frame.size.height: %@ 16/9= %@", @(frame.size.height), @(height));
+    frame.size.height = height;
+    
     
     return frame;
 }

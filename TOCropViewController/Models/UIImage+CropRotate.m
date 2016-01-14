@@ -59,5 +59,11 @@
     return croppedImage;
 }
 
+- (UIImage *)croppedImageWithFrame:(CGRect)cropRect {
+    CGImageRef imageRef = CGImageCreateWithImageInRect([self CGImage], cropRect);
+    UIImage *image = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    return  image;
+}
 
 @end

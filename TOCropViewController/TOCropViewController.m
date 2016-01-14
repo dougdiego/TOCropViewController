@@ -377,7 +377,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
 }
 
 - (void)cropView:(TOCropView *)cropView didChangeToCropSize: (CGSize) size {
-    //NSLog(@"didChangeToCropSize");
+    //NSLog(@"didChangeToCropSize: %@", NSStringFromCGSize(size));
     [self updateLabelWithSize: size];
 }
 
@@ -493,6 +493,7 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
 
 - (void)doneButtonTapped
 {
+    //NSLog(@"doneButtonTapped");
     CGRect cropFrame = self.cropView.croppedImageFrame;
     NSInteger angle = self.cropView.angle;
 
@@ -565,13 +566,16 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     }
     //If the delegate that requires the specific cropped image is provided, call it
     else if ([self.delegate respondsToSelector:@selector(cropViewController:didCropToImage:withRect:angle:)]) {
+        //NSLog(@"about to crop");
         UIImage *image = nil;
         if (angle == 0 && CGRectEqualToRect(cropFrame, (CGRect){CGPointZero, self.image.size})) {
             image = self.image;
         }
         else {
-            image = [self.image croppedImageWithFrame:cropFrame angle:angle];
+            //image = [self.image croppedImageWithFrame:cropFrame angle:angle];
+            image = [self.image croppedImageWithFrame:cropFrame];
         }
+        //NSLog(@"did crop");
         
         //dispatch on the next run-loop so the animation isn't interuppted by the crop operation
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.03f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
