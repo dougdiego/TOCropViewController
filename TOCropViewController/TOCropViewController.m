@@ -572,8 +572,8 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
             image = self.image;
         }
         else {
-            //image = [self.image croppedImageWithFrame:cropFrame angle:angle];
-            image = [self.image croppedImageWithFrame:cropFrame];
+            image = [self.image croppedImageWithFrame:cropFrame angle:0];
+            //image = [self.image croppedImageWithFrame:cropFrame];
         }
         //NSLog(@"did crop");
         
