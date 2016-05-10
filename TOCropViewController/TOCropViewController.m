@@ -385,13 +385,14 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
     
     NSString * sizeString = [NSString stringWithFormat:@"%@x%@", @(size.width), @(size.height)];
     if( size.width >= 3840){
-        self.label.text = [NSString stringWithFormat:@"%@ (UDH)", sizeString];
+        self.label.text = [NSString stringWithFormat:@"%@ (Best Quality)", sizeString];
          self.toolbar.doneButtonEnabled = true;
     } else if (size.width < 1920){
-        self.label.text = [NSString stringWithFormat:@"%@ (Too Small)", sizeString];
-        self.toolbar.doneButtonEnabled = false;
+        self.label.text = [NSString stringWithFormat:@"%@ (Low Quality)", sizeString];
+        self.toolbar.doneButtonEnabled = true;
     } else {
-        self.label.text = sizeString;
+        self.label.text = [NSString stringWithFormat:@"%@ (Good Quality)", sizeString];
+        //self.label.text = sizeString;
         self.toolbar.doneButtonEnabled = true;
     }
 }
