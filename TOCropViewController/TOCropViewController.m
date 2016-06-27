@@ -195,11 +195,12 @@ typedef NS_ENUM(NSInteger, TOCropViewControllerAspectRatio) {
 {
     CGRect frame = self.toolbar.frame;
     if (verticalLayout ) {
+        CGFloat verticalTopPadding = 20.0f;
         frame = self.toolbar.frame;
         frame.origin.x = 0.0f;
-        frame.origin.y = 0.0f;
+        frame.origin.y = verticalTopPadding;
         frame.size.width = 44.0f;
-        frame.size.height = CGRectGetHeight(self.view.frame);
+        frame.size.height = CGRectGetHeight(self.view.frame)-verticalTopPadding;
     }
     else {
         frame.origin.x = 0.0f;
